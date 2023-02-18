@@ -1,0 +1,42 @@
+﻿@model CursoMOD119.Models.Item
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Item</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @SharedLocalizer["Name"]
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Name
+        </dd>
+        <dt class="col-sm-2">
+            @SharedLocalizer["Creation Date"]
+        </dt>
+        <dd class="col-sm-10">
+            @Model.CreationDate
+        </dd>
+        <dt class="col-sm-2">
+            @SharedLocalizer["Price"] (€)
+        </dt>
+        <dd class="col-sm-10">
+            @String.Format("{0:#, ##0.00}", Model.Price) €
+        </dd>
+        <dt class="col-sm-2">
+           @* @if(Thread.CurrentThread.CurrentCulture.Name == "pt")
+            {}*@
+            @SharedLocalizer["Discontinued"]
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Discontinued
+        </dd>      
+    </dl>
+</div>
+<div>
+</div>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<CursoMOD119.Models.StockMovement>
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <h6 align="right"><a asp-action="Create">@SharedLocalizer["Create new movement"]</a></h6>
+    <h6 align="left"> <a asp-action="Index">@SharedLocalizer["All"]</a> | <a asp-action="Inlet">@SharedLocalizer["Inlet"]s</a> | <a asp-action="Outlet">@SharedLocalizer["Outlet"]s</a></h6>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MovementDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Type)*@
+                @if(item.Type)
+                {
+                    <a>@SharedLocalizer["Inlet"]</a>
+                }
+                else
+                {
+                    <a>@SharedLocalizer["Outlet"]</a>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovementDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.Name)
+            </td>
+            <td>
+                <partial name="_CRUD_actions" model="item.ID" />
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
