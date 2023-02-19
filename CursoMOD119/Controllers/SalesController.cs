@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CursoMOD119.Data;
 using CursoMOD119.Models;
+using CursoMOD119.ViewModels;
 
 namespace CursoMOD119.Controllers
 {
@@ -49,6 +50,7 @@ namespace CursoMOD119.Controllers
         public IActionResult Create()
         {
             ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
+            ViewData["ItemID"] = new SelectList(_context.Items, "ID", "Name");
             return View();
         }
 
@@ -57,12 +59,25 @@ namespace CursoMOD119.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID")] Sale sale)
+        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID, ItemID")] CreateSaleViewModel sale)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(sale);
+                //Add sale
+                Sale NewSale= new Sale();
+                NewSale.SaleDate = sale.SaleDate;
+                NewSale.Amount = sale.Amount;
+                NewSale.ClientID = sale.ClientID;
+                _context.Add(NewSale);
                 await _context.SaveChangesAsync();
+
+                ////Add ItemSale
+                //ItemSale itemSale = new ItemSale();
+                //itemSale.SalesID = _context.Sales.OrderByDescending(s => s.ID).FirstOrDefault()!.ID;
+                //itemSale.ItemsID = sale.ItemID;
+                //_context.Add(itemSale);
+                //await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", sale.ClientID);
