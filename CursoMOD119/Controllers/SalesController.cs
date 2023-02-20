@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using CursoMOD119.Data;
 using CursoMOD119.Models;
 using CursoMOD119.ViewModels;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using NuGet.Packaging;
 
 namespace CursoMOD119.Controllers
 {
@@ -37,6 +41,7 @@ namespace CursoMOD119.Controllers
 
             var sale = await _context.Sales
                 .Include(s => s.Client)
+                .Include(i => i.Items)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (sale == null)
             {
@@ -50,7 +55,7 @@ namespace CursoMOD119.Controllers
         public IActionResult Create()
         {
             ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
-            ViewData["ItemID"] = new SelectList(_context.Items, "ID", "Name");
+            ViewData["ItemIDs"] = new MultiSelectList(_context.Items, "ID", "Name");
             return View();
         }
 
@@ -59,24 +64,30 @@ namespace CursoMOD119.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID, ItemID")] CreateSaleViewModel sale)
+        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID,ItemIDs")] SaleViewModel sale)
         {
             if (ModelState.IsValid)
             {
+                List<Item> items = new List<Item>();
+
+                foreach(var itemID in sale.ItemIDs)
+                {
+                    Item? item = _context.Items.Find(itemID);
+
+                    if (item != null)                    
+                        items.Add(item);
+                }
+
                 //Add sale
-                Sale NewSale= new Sale();
-                NewSale.SaleDate = sale.SaleDate;
-                NewSale.Amount = sale.Amount;
-                NewSale.ClientID = sale.ClientID;
+                Sale NewSale = new Sale
+                {
+                    SaleDate = sale.SaleDate,
+                    Amount = sale.Amount,
+                    ClientID = sale.ClientID,
+                    Items = items
+                };
                 _context.Add(NewSale);
                 await _context.SaveChangesAsync();
-
-                ////Add ItemSale
-                //ItemSale itemSale = new ItemSale();
-                //itemSale.SalesID = _context.Sales.OrderByDescending(s => s.ID).FirstOrDefault()!.ID;
-                //itemSale.ItemsID = sale.ItemID;
-                //_context.Add(itemSale);
-                //await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -92,13 +103,36 @@ namespace CursoMOD119.Controllers
                 return NotFound();
             }
 
-            var sale = await _context.Sales.FindAsync(id);
+            var sale = await _context.Sales
+                       .Include(s => s.Client)
+                       .Include(i => i.Items)
+                       .FirstOrDefaultAsync(m => m.ID == id);
+
             if (sale == null)
             {
                 return NotFound();
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", sale.ClientID);
-            return View(sale);
+
+            int i = 0;
+            int[] itemsID = new int[sale.Items.Count];
+            foreach (var item in sale.Items)
+            {
+                itemsID[i] = item.ID;
+                i++;
+            }
+
+            SaleViewModel saleEdit = new SaleViewModel
+            {
+                ID = sale.ID,
+                SaleDate = sale.SaleDate,
+                Amount = sale.Amount,
+                ClientID = sale.ClientID,
+                ItemIDs = itemsID
+            };
+
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", sale.ClientID);
+            ViewData["ItemIDs"] = new MultiSelectList(_context.Items, "ID", "Name", sale.Items);
+            return View(saleEdit);
         }
 
         // POST: Sales/Edit/5

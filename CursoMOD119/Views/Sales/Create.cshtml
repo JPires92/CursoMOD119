@@ -1,4 +1,4 @@
-﻿@model CursoMOD119.ViewModels.CreateSaleViewModel
+﻿@model CursoMOD119.ViewModels.SaleViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -27,8 +27,8 @@
                 <select asp-for="ClientID" class ="form-control" asp-items="ViewBag.ClientID"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ItemID" class="control-label"></label>
-                <select asp-for="ItemID" class="form-control" asp-items="ViewBag.ItemID"></select>
+                <label asp-for="ItemIDs" class="control-label"></label>
+                <select asp-for="ItemIDs" class="form-control" asp-items="ViewBag.ItemIDs"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

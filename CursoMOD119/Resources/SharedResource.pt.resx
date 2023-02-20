@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Idade</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>Todos</value>
   </data>
   <data name="Amount" xml:space="preserve">
     <value>Quantidade</value>
+  </data>
+  <data name="Client" xml:space="preserve">
+    <value>Cliente</value>
   </data>
   <data name="Create new movement" xml:space="preserve">
     <value>Criar novo movimento</value>
@@ -161,6 +170,9 @@
   </data>
   <data name="RangeErrorMessage" xml:space="preserve">
     <value>Por favor insira um valor entre {1} e {2}</value>
+  </data>
+  <data name="Sale Date" xml:space="preserve">
+    <value>Data da venda</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Guardar</value>

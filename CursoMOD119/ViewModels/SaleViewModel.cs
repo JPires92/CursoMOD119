@@ -5,8 +5,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CursoMOD119.ViewModels
 {
-    public class CreateSaleViewModel
+    public class SaleViewModel
     {
+        public int ID { get; set; }
+
         [Display(Name = "Sale Date")]
         public DateTime SaleDate { get; set; }
         
@@ -18,6 +20,6 @@ namespace CursoMOD119.ViewModels
         public int ClientID { get; set; }
 
         [Display(Name = "Items")]
-        public int ItemID { get; set; }
+        public int[] ItemIDs { get; set; }
     }
 }

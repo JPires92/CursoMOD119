@@ -26,7 +26,17 @@
             @Html.DisplayNameFor(model => model.Client)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Client.ID)
+            @Html.DisplayFor(model => model.Client.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Items)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach(var item in Model.Items)
+            {
+                @item.Name <br />
+            }
+            @*@Html.DisplayFor(model => model.Client.Name)*@
         </dd>
     </dl>
 </div>

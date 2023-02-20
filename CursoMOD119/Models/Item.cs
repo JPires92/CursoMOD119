@@ -24,6 +24,6 @@ namespace CursoMOD119.Models
         public bool Discontinued { get; set; }
 
         [Display(Name = "Sales")]
-        public ICollection<Sale> Sales { get; set; }
+        public ICollection<Sale>? Sales { get; set; }
     }
 }

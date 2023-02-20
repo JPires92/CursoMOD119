@@ -13,6 +13,7 @@ namespace CursoMOD119.Models
         public int Age { get; set; }
         
         [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = "";
         
         [Display(Name = "Active")]

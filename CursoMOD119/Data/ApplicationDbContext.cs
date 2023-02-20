@@ -15,6 +15,5 @@ namespace CursoMOD119.Data
         public DbSet<StockMovement> StockMovements { get; set; } = default!;
         public DbSet<Sale> Sales { get; set; } = default!;
         public DbSet<Client> Clients { get; set; } = default!;
-        //public DbSet<ItemSale> ItemsSale { get; set; } = default!;
     }
 }
