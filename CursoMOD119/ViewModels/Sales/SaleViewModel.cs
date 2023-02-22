@@ -1,9 +1,9 @@
-﻿using CursoMOD119.Models;
+﻿using CursoMOD119.ViewModels.Items;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace CursoMOD119.ViewModels
+namespace CursoMOD119.ViewModels.Sales
 {
     public class SaleViewModel
     {
@@ -11,7 +11,7 @@ namespace CursoMOD119.ViewModels
 
         [Display(Name = "Sale Date")]
         public DateTime SaleDate { get; set; }
-        
+
         [Display(Name = "Amount")]
         [Column(TypeName = "money")]
         public decimal Amount { get; set; }
@@ -20,6 +20,8 @@ namespace CursoMOD119.ViewModels
         public int ClientID { get; set; }
 
         [Display(Name = "Items")]
-        public int[] ItemIDs { get; set; }
+        public int[]? ItemIDs { get; set; } = Array.Empty<int>();
+
+        public List<SelectableItemViewModel> SelectableItems { get; set; }
     }
 }

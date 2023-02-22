@@ -7,11 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CursoMOD119.Data;
 using CursoMOD119.Models;
-using CursoMOD119.ViewModels;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using NuGet.Packaging;
+using CursoMOD119.ViewModels.Sales;
+using CursoMOD119.ViewModels.Items;
 
 namespace CursoMOD119.Controllers
 {
@@ -43,6 +44,7 @@ namespace CursoMOD119.Controllers
                 .Include(s => s.Client)
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(m => m.ID == id);
+            
             if (sale == null)
             {
                 return NotFound();
@@ -56,7 +58,19 @@ namespace CursoMOD119.Controllers
         {
             ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
             ViewData["ItemIDs"] = new MultiSelectList(_context.Items, "ID", "Name");
-            return View();
+
+            var saleViewModel = new SaleViewModel();
+            var items = _context.Items.ToList();
+
+            saleViewModel.SelectableItems = items.Select(item => new SelectableItemViewModel
+                {
+                    ID = item.ID,
+                    Name = item.Name,
+                    Price = item.Price,
+                    Selected = false
+                }).ToList();
+
+            return View(saleViewModel);
         }
 
         // POST: Sales/Create
@@ -64,18 +78,21 @@ namespace CursoMOD119.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID,ItemIDs")] SaleViewModel sale)
+        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID,ItemIDs, SelectableItems")] SaleViewModel sale)
         {
             if (ModelState.IsValid)
             {
                 List<Item> items = new List<Item>();
 
-                foreach(var itemID in sale.ItemIDs)
+                foreach(var selectableItem in sale.SelectableItems)
                 {
-                    Item? item = _context.Items.Find(itemID);
+                    if (selectableItem.Selected)
+                    {
+                        Item? item = _context.Items.Find(selectableItem.ID);
 
-                    if (item != null)                    
-                        items.Add(item);
+                        if (item != null)
+                            items.Add(item);
+                    }   
                 }
 
                 //Add sale
