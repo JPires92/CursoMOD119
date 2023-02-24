@@ -78,7 +78,7 @@ namespace CursoMOD119.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID,ItemIDs, SelectableItems")] SaleViewModel sale)
+        public async Task<IActionResult> Create([Bind("ID,SaleDate,Amount,ClientID, SelectableItems")] SaleViewModel sale)
         {
             if (ModelState.IsValid)
             {
@@ -120,36 +120,45 @@ namespace CursoMOD119.Controllers
                 return NotFound();
             }
 
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
+            //ViewData["ItemIDs"] = new MultiSelectList(_context.Items, "ID", "Name");
+
             var sale = await _context.Sales
                        .Include(s => s.Client)
                        .Include(i => i.Items)
                        .FirstOrDefaultAsync(m => m.ID == id);
-
-            if (sale == null)
+            
+            var saleViewModel = new SaleViewModel();
+            if (sale != null)
             {
-                return NotFound();
+                //Fill sale data
+                saleViewModel.ID = sale.ID;
+                saleViewModel.SaleDate = sale.SaleDate;
+                saleViewModel.Amount = sale.Amount;
+                saleViewModel.ClientID = sale.ClientID;
+
+
+                //Fill items
+                var items = _context.Items.ToList();
+                saleViewModel.SelectableItems = items.Select(item => new SelectableItemViewModel
+                {
+                    ID = item.ID,
+                    Name = item.Name,
+                    Price = item.Price,
+                    Selected = false
+                }).ToList();
+                //Change selected items
+                for (int i = 0; i < saleViewModel.SelectableItems.Count; i++)
+                {
+                    foreach (var item in sale.Items)
+                    {
+                        if (item.ID == saleViewModel.SelectableItems[i].ID)
+                            saleViewModel.SelectableItems[i].Selected = true;
+                    }
+                };
             }
 
-            int i = 0;
-            int[] itemsID = new int[sale.Items.Count];
-            foreach (var item in sale.Items)
-            {
-                itemsID[i] = item.ID;
-                i++;
-            }
-
-            SaleViewModel saleEdit = new SaleViewModel
-            {
-                ID = sale.ID,
-                SaleDate = sale.SaleDate,
-                Amount = sale.Amount,
-                ClientID = sale.ClientID,
-                ItemIDs = itemsID
-            };
-
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", sale.ClientID);
-            ViewData["ItemIDs"] = new MultiSelectList(_context.Items, "ID", "Name", sale.Items);
-            return View(saleEdit);
+            return View(saleViewModel);
         }
 
         // POST: Sales/Edit/5
@@ -157,7 +166,7 @@ namespace CursoMOD119.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,SaleDate,Amount,ClientID")] Sale sale)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,SaleDate,Amount,ClientID, SelectableItems")] SaleViewModel sale)
         {
             if (id != sale.ID)
             {
@@ -166,9 +175,36 @@ namespace CursoMOD119.Controllers
 
             if (ModelState.IsValid)
             {
+                Sale? UpdateSale =  await _context.Sales
+                                   .Include(s => s.Client)
+                                   .Include(i => i.Items)
+                                   .FirstOrDefaultAsync(m => m.ID == sale.ID);
+
+                List<Item> itemsAdded = new List<Item>();
+                if (UpdateSale != null)
+                {
+                    foreach (var itemSelected in sale.SelectableItems)
+                    {
+                        if (itemSelected.Selected)
+                        {
+                            Item? item = _context.Items.Find(itemSelected.ID);
+
+                            if (item != null)
+                                itemsAdded.Add(item);
+                        }
+                    }
+    
+                }
+
+                // Update the Sale entity with the new values
+                UpdateSale.SaleDate = sale.SaleDate;
+                UpdateSale.Amount = sale.Amount;
+                UpdateSale.ClientID = sale.ClientID;
+                UpdateSale.Items = itemsAdded;
+
                 try
                 {
-                    _context.Update(sale);
+                    _context.Update(UpdateSale);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
