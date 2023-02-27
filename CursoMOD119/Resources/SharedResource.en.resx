@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Edited sale successfully." xml:space="preserve">
+    <value>Edited &lt;b&gt;sale '{0}'&lt;/b&gt; successfully.</value>
+  </data>
   <data name="RangeErrorMessage" xml:space="preserve">
     <value>Please inpout a value between {1} and {2}</value>
   </data>

@@ -150,6 +150,9 @@
   <data name="Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
+  <data name="Edited sale successfully." xml:space="preserve">
+    <value>&lt;b&gt;Venda '{0}' &lt;/b&gt; editada com sucesso.</value>
+  </data>
   <data name="Inlet" xml:space="preserve">
     <value>Entrada</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="Sale Date" xml:space="preserve">
     <value>Data da venda</value>
+  </data>
+  <data name="Sale Edit" xml:space="preserve">
+    <value>Edição de venda</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Guardar</value>

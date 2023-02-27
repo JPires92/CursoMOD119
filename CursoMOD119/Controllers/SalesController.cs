@@ -13,16 +13,23 @@ using System.ComponentModel.DataAnnotations;
 using NuGet.Packaging;
 using CursoMOD119.ViewModels.Sales;
 using CursoMOD119.ViewModels.Items;
+using NToastNotify;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CursoMOD119.Controllers
 {
     public class SalesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IToastNotification _toastNotification;
+        private readonly IHtmlLocalizer<SharedResource> _sharedLocalizer;
 
-        public SalesController(ApplicationDbContext context)
+        public SalesController(ApplicationDbContext context, IToastNotification toastNotification, 
+            IHtmlLocalizer<SharedResource> sharedLocalizer)
         {
             _context = context;
+            _toastNotification = toastNotification;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         // GET: Sales
@@ -120,43 +127,32 @@ namespace CursoMOD119.Controllers
                 return NotFound();
             }
 
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
-            //ViewData["ItemIDs"] = new MultiSelectList(_context.Items, "ID", "Name");
-
             var sale = await _context.Sales
                        .Include(s => s.Client)
                        .Include(i => i.Items)
                        .FirstOrDefaultAsync(m => m.ID == id);
-            
-            var saleViewModel = new SaleViewModel();
-            if (sale != null)
+
+            var items = _context.Items.ToList();
+            var selectableItems = items.Select(item => new SelectableItemViewModel
             {
-                //Fill sale data
-                saleViewModel.ID = sale.ID;
-                saleViewModel.SaleDate = sale.SaleDate;
-                saleViewModel.Amount = sale.Amount;
-                saleViewModel.ClientID = sale.ClientID;
+                ID = item.ID,
+                Name = item.Name,
+                Price = item.Price,
+                Selected = sale.Items.Contains(item)
+            }).ToList();
+
+            var saleViewModel = new SaleViewModel()
+            {
+                ID = sale.ID,
+                Amount = sale.Amount,
+                ClientID = sale.ClientID,
+                SaleDate = sale.SaleDate,
+                SelectableItems = selectableItems
+
+            };
 
 
-                //Fill items
-                var items = _context.Items.ToList();
-                saleViewModel.SelectableItems = items.Select(item => new SelectableItemViewModel
-                {
-                    ID = item.ID,
-                    Name = item.Name,
-                    Price = item.Price,
-                    Selected = false
-                }).ToList();
-                //Change selected items
-                for (int i = 0; i < saleViewModel.SelectableItems.Count; i++)
-                {
-                    foreach (var item in sale.Items)
-                    {
-                        if (item.ID == saleViewModel.SelectableItems[i].ID)
-                            saleViewModel.SelectableItems[i].Selected = true;
-                    }
-                };
-            }
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
 
             return View(saleViewModel);
         }
@@ -179,33 +175,37 @@ namespace CursoMOD119.Controllers
                                    .Include(s => s.Client)
                                    .Include(i => i.Items)
                                    .FirstOrDefaultAsync(m => m.ID == sale.ID);
-
-                List<Item> itemsAdded = new List<Item>();
-                if (UpdateSale != null)
-                {
-                    foreach (var itemSelected in sale.SelectableItems)
-                    {
-                        if (itemSelected.Selected)
-                        {
-                            Item? item = _context.Items.Find(itemSelected.ID);
-
-                            if (item != null)
-                                itemsAdded.Add(item);
-                        }
-                    }
-    
-                }
-
-                // Update the Sale entity with the new values
-                UpdateSale.SaleDate = sale.SaleDate;
-                UpdateSale.Amount = sale.Amount;
-                UpdateSale.ClientID = sale.ClientID;
-                UpdateSale.Items = itemsAdded;
-
                 try
                 {
+                    List<Item> itemsAdded = new List<Item>();
+                    if (UpdateSale != null)
+                    {
+                        foreach (var itemSelected in sale.SelectableItems)
+                        {
+                            if (itemSelected.Selected)
+                            {
+                                Item? item = _context.Items.Find(itemSelected.ID);
+
+                                if (item != null)
+                                    itemsAdded.Add(item);
+                            }
+                        }
+
+                    }
+
+                    // Update the Sale entity with the new values
+                    UpdateSale.SaleDate = sale.SaleDate;
+                    UpdateSale.Amount = sale.Amount;
+                    UpdateSale.ClientID = sale.ClientID;
+                    UpdateSale.Items = itemsAdded;
+
+
                     _context.Update(UpdateSale);
                     await _context.SaveChangesAsync();
+
+                    _toastNotification.AddSuccessToastMessage(
+                                    string.Format(_sharedLocalizer["Edited sale successfully."].Value, sale.ID),
+                                    new ToastrOptions { Title = _sharedLocalizer["Sale Edit"].Value });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -220,7 +220,7 @@ namespace CursoMOD119.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", sale.ClientID);
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", sale.ClientID);
             return View(sale);
         }
 
