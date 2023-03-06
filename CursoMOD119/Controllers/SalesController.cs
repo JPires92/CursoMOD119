@@ -69,13 +69,15 @@ namespace CursoMOD119.Controllers
             var saleViewModel = new SaleViewModel();
             var items = _context.Items.ToList();
 
-            saleViewModel.SelectableItems = items.Select(item => new SelectableItemViewModel
-                {
-                    ID = item.ID,
-                    Name = item.Name,
-                    Price = item.Price,
-                    Selected = false
-                }).ToList();
+            //saleViewModel.SelectableItems = items.Select(item => new SelectableItemViewModel
+            //    {
+            //        ID = item.ID,
+            //        Name = item.Name,
+            //        Price = item.Price,
+            //        Selected = false
+            //    }).ToList();
+
+            saleViewModel.SelectableItems = items.ConvertAll<SelectableItemViewModel>(i => i);
 
             return View(saleViewModel);
         }
@@ -101,15 +103,17 @@ namespace CursoMOD119.Controllers
                             items.Add(item);
                     }   
                 }
+                Sale NewSale = sale;
+                NewSale.Items = items;
 
-                //Add sale
-                Sale NewSale = new Sale
-                {
-                    SaleDate = sale.SaleDate,
-                    Amount = sale.Amount,
-                    ClientID = sale.ClientID,
-                    Items = items
-                };
+                //Replaced by this 2 lines before (operators added in sale model)
+                //Sale NewSale = new Sale
+                //{
+                //    SaleDate = sale.SaleDate,
+                //    Amount = sale.Amount,
+                //    ClientID = sale.ClientID,
+                //    Items = items
+                //};
                 _context.Add(NewSale);
                 await _context.SaveChangesAsync();
 
@@ -132,6 +136,7 @@ namespace CursoMOD119.Controllers
                        .Include(i => i.Items)
                        .FirstOrDefaultAsync(m => m.ID == id);
 
+            SaleViewModel saleViewModel = sale;
             var items = _context.Items.ToList();
             var selectableItems = items.Select(item => new SelectableItemViewModel
             {
@@ -141,15 +146,17 @@ namespace CursoMOD119.Controllers
                 Selected = sale.Items.Contains(item)
             }).ToList();
 
-            var saleViewModel = new SaleViewModel()
-            {
-                ID = sale.ID,
-                Amount = sale.Amount,
-                ClientID = sale.ClientID,
-                SaleDate = sale.SaleDate,
-                SelectableItems = selectableItems
+            //saleViewModel.SelectableItems = items.ConvertAll<SelectableItemViewModel>(i => i);
+            saleViewModel.SelectableItems = selectableItems;
 
-            };
+            //var saleViewModel = new SaleViewModel()
+            //{
+            //    ID = sale.ID,
+            //    Amount = sale.Amount,
+            //    ClientID = sale.ClientID,
+            //    SaleDate = sale.SaleDate,
+            //    SelectableItems = selectableItems
+            //};
 
 
             ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");

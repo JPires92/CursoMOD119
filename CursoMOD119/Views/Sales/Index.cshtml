@@ -43,3 +43,18 @@
 }
     </tbody>
 </table>
+
+
+
+@(
+Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(Model => Model.SaleDate).Titled(SharedLocalizer["Sale Date"]);
+        columns.Add(Model => Model.Amount);
+        columns.Add(Model => Model.Client.Name);
+    })
+    .Filterable(GridFilterCase.Lower)
+    .Using(GridFilterMode.Header)
+)

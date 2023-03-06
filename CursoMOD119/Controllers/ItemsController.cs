@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CursoMOD119.Data;
 using CursoMOD119.Models;
+using CursoMOD119.Lib;
 
 namespace CursoMOD119.Controllers
 {
@@ -20,11 +21,97 @@ namespace CursoMOD119.Controllers
         }
 
         // GET: Get all Items
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-              return _context.Items != null ? 
-                          View(await _context.Items.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Items'  is null.");
+            if (_context.Items == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.Items'  is null.");
+            }
+
+
+            ViewData["SearchName"] = searchName;
+
+            var itemsSql = from i in _context.Items select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.Name.Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "name_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Name);
+                    break;
+                case "name_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Name);
+                    break;
+                case "price_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Price);
+                    break;
+                case "price_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Price);
+                    break;
+
+                case "creationDate_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.CreationDate);
+                    break;
+                case "creationDate_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.CreationDate);
+                    break;
+
+                case "discontinued_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Discontinued);
+                    break;
+                case "discontinued_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Discontinued);
+                    break;
+            }
+
+            if (sort == "name_desc")
+            {
+                ViewData["NameSort"] = "name_asc";
+            }
+            else
+            {
+                ViewData["NameSort"] = "name_desc";
+            }
+
+            if (sort == "price_desc")
+            {
+                ViewData["PriceSort"] = "price_asc";
+            }
+            else
+            {
+                ViewData["PriceSort"] = "price_desc";
+            }
+
+            if (sort == "creationDate_desc")
+            {
+                ViewData["CreationDateSort"] = "creationDate_asc";
+            }
+            else
+            {
+                ViewData["CreationDateSort"] = "creationDate_desc";
+            }
+
+            if (sort == "discontinued_desc")
+            {
+                ViewData["DiscontinuedSort"] = "discontinued_asc";
+            }
+            else
+            {
+                ViewData["DiscontinuedSort"] = "discontinued_desc";
+            }
+
+            int pageSize = 5;
+
+            var items = await PaginatedList<Item>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
+
         }
 
         // GET: Get Available Items

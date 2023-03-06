@@ -46,7 +46,7 @@ namespace CursoMOD119.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("CursoMOD119.Models.Item", b =>
@@ -72,7 +72,7 @@ namespace CursoMOD119.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("CursoMOD119.Models.Sale", b =>
@@ -96,7 +96,7 @@ namespace CursoMOD119.Data.Migrations
 
                     b.HasIndex("ClientID");
 
-                    b.ToTable("Sales");
+                    b.ToTable("Sales", (string)null);
                 });
 
             modelBuilder.Entity("CursoMOD119.Models.StockMovement", b =>
@@ -123,7 +123,7 @@ namespace CursoMOD119.Data.Migrations
 
                     b.HasIndex("ItemID");
 
-                    b.ToTable("StockMovements");
+                    b.ToTable("StockMovements", (string)null);
                 });
 
             modelBuilder.Entity("ItemSale", b =>
@@ -138,7 +138,7 @@ namespace CursoMOD119.Data.Migrations
 
                     b.HasIndex("SalesID");
 
-                    b.ToTable("ItemSale");
+                    b.ToTable("ItemSale", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

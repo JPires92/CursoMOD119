@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CursoMOD119.ViewModels.Sales;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CursoMOD119.Models
@@ -24,5 +25,34 @@ namespace CursoMOD119.Models
 
         public Client? Client { get; set; }
 
+        //Convert sale to saleViewModel
+        public static implicit operator SaleViewModel(Sale sale)
+        {
+            if (sale == null)
+                return null;
+
+            return new SaleViewModel
+            {
+                ID = sale.ID,
+                Amount = sale.Amount,
+                ClientID = sale.ClientID,
+                SaleDate = sale.SaleDate
+            };
+        }
+
+        //Convert 'saleViewModel' to 'sale'
+        public static implicit operator Sale(SaleViewModel saleViewModel)
+        {
+            if (saleViewModel == null)
+                return null;
+
+            return new Sale
+            {
+                ID = saleViewModel.ID,
+                Amount = saleViewModel.Amount,
+                ClientID = saleViewModel.ClientID,
+                SaleDate = saleViewModel.SaleDate
+            };
+        }
     }
 }

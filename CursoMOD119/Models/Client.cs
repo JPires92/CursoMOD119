@@ -18,8 +18,5 @@ namespace CursoMOD119.Models
         
         [Display(Name = "Active")]
         public bool Active { get; set; }
-
-        [Display(Name = "Sales")]
-        public ICollection<Sale> Sales { get; set; }
     }
 }

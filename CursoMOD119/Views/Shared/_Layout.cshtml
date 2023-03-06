@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CursoMOD119.styles.css" asp-append-version="true" />
+    
+    @* MVC-GRID*@
+    <link rel="stylesheet" href="~/lib/mvc-grid/css/mvc-grid.css"/>
 </head>
 <body>
     <header>
@@ -57,5 +60,11 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("NToastNotify")
+    
+    @* MVC-GRID*@
+    <script src="~/lib/mvc-grid/js/mvc-grid.js"></script>
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
 </body>
 </html>
