@@ -135,8 +135,11 @@
   <data name="Client" xml:space="preserve">
     <value>Cliente</value>
   </data>
-  <data name="Create new movement" xml:space="preserve">
-    <value>Criar novo movimento</value>
+  <data name="Clients" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="Create new" xml:space="preserve">
+    <value>Criar novo</value>
   </data>
   <data name="Creation Date" xml:space="preserve">
     <value>Data de Criação</value>
@@ -183,8 +186,14 @@
   <data name="Sale Edit" xml:space="preserve">
     <value>Edição de venda</value>
   </data>
+  <data name="Sales" xml:space="preserve">
+    <value>Vendas</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Guardar</value>
+  </data>
+  <data name="Stock Movements" xml:space="preserve">
+    <value>Movimentos de Stock</value>
   </data>
   <data name="The field {0} must be a number." xml:space="preserve">
     <value>O campo {0} deve ser um número.</value>

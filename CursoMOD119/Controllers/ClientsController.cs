@@ -29,6 +29,8 @@ namespace CursoMOD119.Controllers
             }
 
             ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
 
             //var clientsSql = from i in _context.Clients select i;
             IQueryable<Client> clientsSql = _context.Clients;

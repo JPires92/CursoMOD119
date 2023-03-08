@@ -5,10 +5,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h2>@SharedLocalizer["Stock Movements"]</h2>
 
 <p>
-    <h6 align="right"><a asp-action="Create">@SharedLocalizer["Create new movement"]</a></h6>
+    <h6 align="right"><a asp-action="Create" class="btn btn-dark">@SharedLocalizer["Create new"]</a></h6>
     <h6 align="left"> <a asp-action="Index">@SharedLocalizer["All"]</a> | <a asp-action="Inlet">@SharedLocalizer["Inlet"]s</a> | <a asp-action="Outlet">@SharedLocalizer["Outlet"]s</a></h6>
 </p>
 <table class="table">

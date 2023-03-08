@@ -9,10 +9,11 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<h1>Index</h1>
+<h2>Items</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <h6 align="right"><a asp-action="Create" class="btn btn-dark">@SharedLocalizer["Create new"]</a></h6>
+
 </p>
 
 
@@ -22,7 +23,7 @@
             @SharedLocalizer["Find by name"]:
             <input type="text" name="searchName" value="@ViewData["SearchName"]" />
             <input type="submit" value="@SharedLocalizer["Search"]" class="btn btn-primary" /> |
-            <a asp-action="Index">@SharedLocalizer["Return to Full List"]</a>
+            <a asp-action="Index" class="btn btn-secondary">@SharedLocalizer["Return to Full List"]</a>
         </p>
     </div>
 </form>
@@ -50,7 +51,6 @@
             <th>
                 @SharedLocalizer["Actions"]
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -70,9 +70,7 @@
                     @Html.DisplayFor(modelItem => item.Discontinued)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">@SharedLocalizer["Edit"]</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">@SharedLocalizer["Details"]</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">@SharedLocalizer["Delete"]</a>
+                   <partial name="_CRUD_actions" model="item.ID" />
                 </td>
             </tr>
         }
