@@ -171,6 +171,9 @@
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
   <data name="Outlet" xml:space="preserve">
     <value>Saída</value>
   </data>
@@ -200,5 +203,8 @@
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tipo</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
   </data>
 </root>

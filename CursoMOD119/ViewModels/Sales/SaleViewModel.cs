@@ -10,7 +10,8 @@ namespace CursoMOD119.ViewModels.Sales
         public int ID { get; set; }
 
         [Display(Name = "Sale Date")]
-        public DateTime SaleDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime SaleDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Amount")]
         [Column(TypeName = "money")]

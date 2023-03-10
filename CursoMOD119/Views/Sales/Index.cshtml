@@ -9,7 +9,7 @@
 <p>
     <h6 align="right"><a asp-action="Create" class="btn btn-dark">@SharedLocalizer["Create new"]</a></h6>
 </p>
-<table class="table">
+@*<table class="table">
     <thead>
         <tr>
             <th>
@@ -43,7 +43,7 @@
 }
     </tbody>
 </table>
-
+*@
 
 
 @(
@@ -51,10 +51,21 @@ Html
     .Grid(Model)
     .Build(columns =>
     {
-        columns.Add(Model => Model.SaleDate).Titled(SharedLocalizer["Sale Date"]);
-        columns.Add(Model => Model.Amount);
-        columns.Add(Model => Model.Client.Name);
+        columns.Add(Model => Model.SaleDate).Titled(SharedLocalizer["Sale Date"]).Filterable(GridFilterType.Double).Formatted("{0:d}");
+        columns.Add(Model => Model.Amount).Titled(SharedLocalizer["Amount"]).Formatted("{0:0.00}");
+        columns.Add(Model => Model.Client.Name).Titled(SharedLocalizer["Name"]);
+
+        columns.Add(Model => Html.ActionLink(SharedLocalizer["Edit"].Value, "Edit", new { id = Model.ID }));
+        columns.Add(Model => Html.ActionLink(SharedLocalizer["Details"].Value, "Details", new { id = Model.ID }));
+        columns.Add(Model => Html.ActionLink(SharedLocalizer["Delete"].Value, "Delete", new { id = Model.ID }));
     })
-    .Filterable(GridFilterCase.Lower)
-    .Using(GridFilterMode.Header)
+    .Filterable()
+    .Pageable(pager =>
+    {
+        pager.PageSizes = new Dictionary<Int32, string> { { 0, "All" }, { 2, "2" }, { 3, "3" }, { 4, "4" } };
+        pager.ShowPageSizes = true;
+        pager.PagesToDisplay = 3;
+        pager.RowsPerPage = 3;
+
+    })
 )
