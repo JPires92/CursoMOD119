@@ -138,6 +138,9 @@
   <data name="Clients" xml:space="preserve">
     <value>Clientes</value>
   </data>
+  <data name="Create a new account." xml:space="preserve">
+    <value>Criar uma nova conta.</value>
+  </data>
   <data name="Create new" xml:space="preserve">
     <value>Criar novo</value>
   </data>
