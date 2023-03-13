@@ -1,6 +1,7 @@
 using CursoMOD119;
 using CursoMOD119.Data;
 using CursoMOD119.Data.Seed;
+using CursoMOD119.Lib;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -37,6 +38,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
+//Apply policies a group of users
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AppConstants.APP_POLICY, policy => policy.RequireRole(AppConstants.APP_POLICY_ROLES));
+    options.AddPolicy(AppConstants.APP_ADMIN_POLICY, policy => policy.RequireRole(AppConstants.AAPP_ADMIN_POLICY_ROLES));
+});
 
 // Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -122,6 +129,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+//Create one user admin and other operative with roles
 Seed();
 
 app.Run();

@@ -16,10 +16,11 @@ using CursoMOD119.ViewModels.Items;
 using NToastNotify;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Authorization;
+using CursoMOD119.Lib;
 
 namespace CursoMOD119.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = AppConstants.APP_POLICY)]
     public class SalesController : Controller
     {
         private readonly ApplicationDbContext _context;

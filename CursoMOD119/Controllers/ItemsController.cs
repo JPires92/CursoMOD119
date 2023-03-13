@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CursoMOD119.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = AppConstants.APP_POLICY)]
     public class ItemsController : Controller
     {
         private readonly ApplicationDbContext _context;

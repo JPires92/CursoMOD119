@@ -12,5 +12,20 @@
         public static readonly string OPERATIVE_USER = "operative";
         public static readonly string OPERATIVE_EMAIL = "operative@operative.pt";
         public static readonly string OPERATIVE_PWD = "operative2023";
+
+        //Policy and roles associated
+        public const string APP_POLICY = "APP_POLICY";
+        public static readonly string[] APP_POLICY_ROLES =
+        {
+            ADMIN_ROLE,
+            OPERATIVE_ROLE
+        };
+
+        //Just 'Admin'
+        public const string APP_ADMIN_POLICY = "APP_ADMIN_POLICY";
+        public static readonly string[] AAPP_ADMIN_POLICY_ROLES =
+        {
+            ADMIN_ROLE
+        };
     }
 }

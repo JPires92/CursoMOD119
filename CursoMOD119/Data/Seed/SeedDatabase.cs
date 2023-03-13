@@ -41,7 +41,7 @@ namespace CursoMOD119.Data.Seed
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -90,9 +90,9 @@ namespace CursoMOD119.Data.Seed
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
     }

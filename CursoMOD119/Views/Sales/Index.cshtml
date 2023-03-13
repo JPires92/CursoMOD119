@@ -56,13 +56,24 @@ Html
         columns.Add(Model => Model.Client.Name).Titled(SharedLocalizer["Name"]);
 
         columns.Add(Model => Html.ActionLink(SharedLocalizer["Edit"].Value, "Edit", new { id = Model.ID }));
-        columns.Add(Model => Html.ActionLink(SharedLocalizer["Details"].Value, "Details", new { id = Model.ID }));
-        columns.Add(Model => Html.ActionLink(SharedLocalizer["Delete"].Value, "Delete", new { id = Model.ID }));
+        
+        //Just the users type 'operative' can see the delete button
+        if (User.IsInRole(AppConstants.OPERATIVE_ROLE))
+        {
+            columns.Add(Model => Html.ActionLink(SharedLocalizer["Details"].Value, "Details", new { id = Model.ID }));
+        }
+        
+        //Just the users type admin can see the delete button
+        if(User.IsInRole(AppConstants.ADMIN_ROLE)){
+            columns.Add(Model => Html.ActionLink(SharedLocalizer["Delete"].Value, "Delete", new { id = Model.ID }));
+        }
+        
     })
     .Filterable()
     .Pageable(pager =>
     {
-        pager.PageSizes = new Dictionary<Int32, string> { { 0, "All" }, { 2, "2" }, { 3, "3" }, { 4, "4" } };
+        pager.PageSizes = new Dictionary
+<Int32, string> { { 0, "All" }, { 2, "2" }, { 3, "3" }, { 4, "4" } };
         pager.ShowPageSizes = true;
         pager.PagesToDisplay = 3;
         pager.RowsPerPage = 3;
