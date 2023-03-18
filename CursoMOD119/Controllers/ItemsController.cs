@@ -108,7 +108,7 @@ namespace CursoMOD119.Controllers
                 ViewData["DiscontinuedSort"] = "discontinued_desc";
             }
 
-            int pageSize = 5;
+            int pageSize = 2;
 
             var items = await PaginatedList<Item>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
 
