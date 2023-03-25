@@ -174,11 +174,17 @@
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Próximo</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>Não</value>
   </data>
   <data name="Outlet" xml:space="preserve">
     <value>Saída</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Anterior</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Preço</value>
