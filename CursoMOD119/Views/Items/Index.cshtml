@@ -7,6 +7,7 @@
 
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    int pageNumber = Convert.ToInt32(ViewData["pageNumber"]);
 }
 
 <h2>Items</h2>
@@ -83,21 +84,24 @@
             <a asp-action="Index"
                asp-route-pageNumber="@(Model.PageIndex - 1)"
                asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
                class="page-link">@SharedLocalizer["Previous"]</a>
         </li>
 
-        @for (int i = 0; i < Model.TotalPages; i++)
+        @for (int i = 1; i <= Model.TotalPages; i++)
         {
-            @if((i+1) == Model.PageIndex)
+            @if(i == Model.PageIndex)
             {
                 <li class="page-item active">
-                    <a asp-action="Index" asp-route-pageNumber="@(i+1)" class="page-link">@(i + 1)</a>
+                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]" 
+                        asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
                 </li>
             }
             else
             {
                 <li class="page-item">
-                    <a asp-action="Index" asp-route-pageNumber="@(i+1)" class="page-link">@(i + 1)</a>
+                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]"
+                         asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
                 </li>
             }
             
@@ -107,6 +111,7 @@
             <a asp-action="Index"
                asp-route-pageNumber="@(Model.PageIndex + 1)"
                asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
                class="page-link">@SharedLocalizer["Next"]</a>
         </li>
     </ul>

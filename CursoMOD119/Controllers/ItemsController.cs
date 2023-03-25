@@ -32,6 +32,8 @@ namespace CursoMOD119.Controllers
 
 
             ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
 
             var itemsSql = from i in _context.Items select i;
 
